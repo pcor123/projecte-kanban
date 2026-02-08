@@ -28,7 +28,7 @@ projecte-kanban/
 3. Comença a afegir tasques!
 
 ## Enllaç a GitHub Pages
-[Enllaç a la pàgina desplegada](https://[tu-usuari].github.io/[nom-repositori]/)
+[Enllaç a la pàgina desplegada](https://pcor123.github.io/projecte-kanban/)
 
 ## Captures de pantalla
 
