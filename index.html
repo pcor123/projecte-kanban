@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Task Manager</title>
+    <link rel="stylesheet" href="css/estils.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-tasks"></i>
+                <h1>Kanban Task Manager</h1>
+            </div>
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Total:</span>
+                    <span class="stat-value" id="total-tasks">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Completades:</span>
+                    <span class="stat-value" id="completed-tasks">0%</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Sección de formulario y controles -->
+            <aside class="sidebar">
+                <!-- Formulario para crear/editar tareas -->
+                <section class="form-section">
+                    <h2><i class="fas fa-plus-circle"></i> Nova Tasca</h2>
+                    <form id="task-form">
+                        <div class="form-group">
+                            <label for="task-title">Títol *</label>
+                            <input type="text" id="task-title" name="title" required placeholder="Introdueix el títol">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="task-description">Descripció</label>
+                            <textarea id="task-description" name="description" rows="3" placeholder="Descripció de la tasca"></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="task-priority">Prioritat</label>
+                                <select id="task-priority" name="priority">
+                                    <option value="baixa">Baixa</option>
+                                    <option value="mitjana" selected>Mitjana</option>
+                                    <option value="alta">Alta</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="task-due-date">Data límit</label>
+                                <input type="date" id="task-due-date" name="dueDate">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="task-status">Estat</label>
+                            <select id="task-status" name="status">
+                                <option value="todo">Per fer</option>
+                                <option value="in-progress">En curs</option>
+                                <option value="done">Fet</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar Tasca
+                            </button>
+                            <button type="button" id="cancel-edit" class="btn btn-secondary" style="display: none;">
+                                <i class="fas fa-times"></i> Cancel·lar
+                            </button>
+                        </div>
+                    </form>
+                </section>
+                
+                <!-- Filtros y búsqueda -->
+                <section class="filters-section">
+                    <h2><i class="fas fa-filter"></i> Filtres i Cerca</h2>
+                    
+                    <div class="form-group">
+                        <label for="search-task">Cercar tasques</label>
+                        <div class="search-box">
+                            <input type="text" id="search-task" placeholder="Cercar per títol o descripció">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Filtrar per estat</label>
+                        <div class="filter-options">
+                            <button class="filter-btn active" data-filter="all">Totes</button>
+                            <button class="filter-btn" data-filter="todo">Per fer</button>
+                            <button class="filter-btn" data-filter="in-progress">En curs</button>
+                            <button class="filter-btn" data-filter="done">Fet</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Filtrar per prioritat</label>
+                        <div class="filter-options">
+                            <button class="filter-btn active" data-priority="all">Totes</button>
+                            <button class="filter-btn priority-low" data-priority="baixa">Baixa</button>
+                            <button class="filter-btn priority-medium" data-priority="mitjana">Mitjana</button>
+                            <button class="filter-btn priority-high" data-priority="alta">Alta</button>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Sección principal: Tablero Kanban -->
+            <section class="kanban-board">
+                <h2 class="board-title">Tauler Kanban</h2>
+                
+                <div class="columns-container">
+                    <!-- Columna: Per fer -->
+                    <div class="column" id="todo-column">
+                        <div class="column-header">
+                            <h3><i class="fas fa-circle"></i> Per fer</h3>
+                            <span class="task-count" id="todo-count">0</span>
+                        </div>
+                        <div class="tasks-list" id="todo-tasks">
+                            <!-- Las tareas se añadirán aquí dinámicamente -->
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list"></i>
+                                <p>No hi ha tasques pendents</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Columna: En curs -->
+                    <div class="column" id="in-progress-column">
+                        <div class="column-header">
+                            <h3><i class="fas fa-spinner"></i> En curs</h3>
+                            <span class="task-count" id="in-progress-count">0</span>
+                        </div>
+                        <div class="tasks-list" id="in-progress-tasks">
+                            <!-- Las tareas se añadirán aquí dinámicamente -->
+                            <div class="empty-state">
+                                <i class="fas fa-cogs"></i>
+                                <p>Cap tasca en progrés</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Columna: Fet -->
+                    <div class="column" id="done-column">
+                        <div class="column-header">
+                            <h3><i class="fas fa-check-circle"></i> Fet</h3>
+                            <span class="task-count" id="done-count">0</span>
+                        </div>
+                        <div class="tasks-list" id="done-tasks">
+                            <!-- Las tareas se añadirán aquí dinámicamente -->
+                            <div class="empty-state">
+                                <i class="fas fa-check"></i>
+                                <p>Cap tasca completada</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Kanban Task Manager - Pràctica de gestió de tasques</p>
+            <p>Les dades es guarden localment al teu navegador</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/script.js"></script>
+</body>
+</html>
