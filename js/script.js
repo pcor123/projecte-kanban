@@ -275,6 +275,67 @@ function prepararEdicioTasca(id) {
     console.log('Preparat per editar tasca:', tasca);
 }
 
+// RENDERITZACIÓ DEL TAULER
+// =========================
+
+// Variables para las columnas
+const columnaPerFer = document.getElementById('todo-tasks');
+const columnaEnCurs = document.getElementById('in-progress-tasks');
+const columnaFet = document.getElementById('done-tasks');
+
+function netejarColumnes() {
+    columnaPerFer.innerHTML = '';
+    columnaEnCurs.innerHTML = '';
+    columnaFet.innerHTML = '';
+}
+
+function renderTauler() {
+    // Netejar totes les columnes
+    netejarColumnes();
+    
+    // Filtrar tasques per estat
+    const tasquesTodo = tasques.filter(t => t.estat === 'todo');
+    const tasquesInProgress = tasques.filter(t => t.estat === 'in-progress');
+    const tasquesDone = tasques.filter(t => t.estat === 'done');
+    
+    // Afegir tasques a les columnes corresponents
+    if (tasquesTodo.length > 0) {
+        tasquesTodo.forEach(tasca => {
+            columnaPerFer.appendChild(crearElementTasca(tasca));
+        });
+    } else {
+        columnaPerFer.innerHTML = '<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No hi ha tasques pendents</p></div>';
+    }
+    
+    if (tasquesInProgress.length > 0) {
+        tasquesInProgress.forEach(tasca => {
+            columnaEnCurs.appendChild(crearElementTasca(tasca));
+        });
+    } else {
+        columnaEnCurs.innerHTML = '<div class="empty-state"><i class="fas fa-cogs"></i><p>Cap tasca en progrés</p></div>';
+    }
+    
+    if (tasquesDone.length > 0) {
+        tasquesDone.forEach(tasca => {
+            columnaFet.appendChild(crearElementTasca(tasca));
+        });
+    } else {
+        columnaFet.innerHTML = '<div class="empty-state"><i class="fas fa-check"></i><p>Cap tasca completada</p></div>';
+    }
+    
+    // Actualitzar estadístiques
+    actualitzarEstadistiques();
+}
+
+// Función auxiliar para crear elementos (la completaremos en el siguiente commit)
+function crearElementTasca(tasca) {
+    // Por ahora solo devolvemos un div básico
+    const div = document.createElement('div');
+    div.className = 'tasca-card';
+    div.textContent = tasca.titol;
+    return div;
+}
+
 // INICIALITZACIÓ DE L'APLICACIÓ
 // ==============================
 
@@ -284,35 +345,21 @@ function prepararEdicioTasca(id) {
 function inicialitzarApp() {
     console.log('Inicialitzant aplicació Kanban...');
     
-    // Configurar la data mínima al dia d'avui
     const avui = new Date().toISOString().split('T')[0];
     dataVencimentTasca.min = avui;
     
-    // Carregar tasques del localStorage
+    // Carregar tasques
     tasques = carregarTasques();
-    console.log(`Tasques carregades: ${tasques.length}`);
     
-    // Inicialitzar dades de prova si no n'hi ha
+    // Inicialitzar dades de prova si cal
     inicialitzarDadesDeProva();
     
-    // Actualitzar estadístiques
-    actualitzarEstadistiques();
+    // Renderitzar el tauler
+    renderTauler();
     
     // Configurar event listeners
     formulariTasca.addEventListener('submit', manejarEnviamentFormulari);
     cancelEditBtn.addEventListener('click', resetFormulari);
-    
-    // Afegir funcions globals per a debugging (es poden eliminar en producció)
-    window.debug = {
-        tasques: () => tasques,
-        localStorage: () => JSON.parse(localStorage.getItem(CLAU_TASQUES) || '[]'),
-        esborrarTotes: () => {
-            localStorage.removeItem(CLAU_TASQUES);
-            tasques = [];
-            actualitzarEstadistiques();
-            console.log('Totes les tasques eliminades');
-        }
-    };
     
     console.log('Aplicació inicialitzada correctament');
 }
