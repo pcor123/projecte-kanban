@@ -134,7 +134,8 @@ function actualitzarTasca(id, dadesActualitzades) {
 function eliminarTasca(id) {
     tasques = tasques.filter(t => t.id !== id);
     guardarTasques(tasques);
-    renderTauler(); // <-- afegim aquí
+    renderTauler(); // ← Refresca columnes i estadístiques
+    console.log('Tasca eliminada, ID:', id);
 }
 
 /**
@@ -147,6 +148,7 @@ function canviarEstatTasca(id, nouEstat) {
     if (tasca) {
         tasca.estat = nouEstat;
         guardarTasques(tasques);
+        renderTauler(); // ← Mostra l’estat actualitzat al tauler
         console.log(`Tasca ${id} moguda a estat: ${nouEstat}`);
     }
 }
@@ -207,13 +209,14 @@ function resetFormulari() {
 function manejarEnviamentFormulari(event) {
     event.preventDefault();
     
-    // Validació bàsica
+    // Validació bàsica: el títol és obligatori
     if (!titolTasca.value.trim()) {
         alert('El títol és obligatori');
         titolTasca.focus();
         return;
     }
     
+    // Crear objecte amb les dades de la tasca
     const dadesTasca = {
         titol: titolTasca.value.trim(),
         descripcio: descripcioTasca.value.trim(),
@@ -225,6 +228,7 @@ function manejarEnviamentFormulari(event) {
     if (editantTascaId) {
         // Mode edició - actualitzar tasca existent
         actualitzarTasca(editantTascaId, dadesTasca);
+        renderTauler();              // ← Actualitza el tauler immediatament
         alert('Tasca actualitzada correctament!');
     } else {
         // Mode nou - afegir nova tasca
@@ -236,16 +240,14 @@ function manejarEnviamentFormulari(event) {
             dadesTasca.estat
         );
         afegirTasca(novaTasca);
+        renderTauler();              // ← Mostra la nova tasca al tauler
         alert('Tasca afegida correctament!');
     }
     
     // Actualitzar estadístiques i resetar formulari
     actualitzarEstadistiques();
     resetFormulari();
-    
-    // A l'Issue 3 actualitzarem també la visualització de les tasques
 }
-
 /**
  * Prepara el formulari per editar una tasca
  * @param {string} id - ID de la tasca a editar
