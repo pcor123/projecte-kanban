@@ -324,12 +324,67 @@ function renderTauler() {
     actualitzarEstadistiques();
 }
 
-// Función auxiliar para crear elementos (la completaremos en el siguiente commit)
 function crearElementTasca(tasca) {
-    // Por ahora solo devolvemos un div básico
     const div = document.createElement('div');
     div.className = 'tasca-card';
-    div.textContent = tasca.titol;
+    
+    // Afegim classe segons la prioritat
+    div.classList.add(`priority-${tasca.prioritat}`);
+
+    // Títol i badge de prioritat
+    const titolDiv = document.createElement('div');
+    titolDiv.className = 'tasca-header';
+    titolDiv.innerHTML = `
+        <strong>${tasca.titol}</strong>
+        <span class="badge-prioritat">${tasca.prioritat}</span>
+    `;
+    div.appendChild(titolDiv);
+
+    // Descripció
+    if (tasca.descripcio) {
+        const desc = document.createElement('p');
+        desc.className = 'tasca-descripcio';
+        desc.textContent = tasca.descripcio;
+        div.appendChild(desc);
+    }
+
+    // Controls: selector d'estat
+    const estatSelect = document.createElement('select');
+    estatSelect.className = 'tasca-estat';
+    ['todo', 'in-progress', 'done'].forEach(estat => {
+        const opcio = document.createElement('option');
+        opcio.value = estat;
+        opcio.textContent = estat === 'todo' ? 'Per fer' : estat === 'in-progress' ? 'En curs' : 'Fet';
+        if (tasca.estat === estat) opcio.selected = true;
+        estatSelect.appendChild(opcio);
+    });
+    estatSelect.addEventListener('change', () => {
+        canviarEstatTasca(tasca.id, estatSelect.value);
+    });
+    div.appendChild(estatSelect);
+
+    // Botons d'acció
+    const controlsDiv = document.createElement('div');
+    controlsDiv.className = 'tasca-controls';
+    
+    const editBtn = document.createElement('button');
+    editBtn.textContent = 'Editar';
+    editBtn.className = 'btn btn-secondary btn-sm';
+    editBtn.addEventListener('click', () => prepararEdicioTasca(tasca.id));
+    controlsDiv.appendChild(editBtn);
+    
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Eliminar';
+    delBtn.className = 'btn btn-danger btn-sm';
+    delBtn.addEventListener('click', () => {
+        if (confirm('Segur que vols eliminar aquesta tasca?')) {
+            eliminarTasca(tasca.id);
+        }
+    });
+    controlsDiv.appendChild(delBtn);
+
+    div.appendChild(controlsDiv);
+
     return div;
 }
 
