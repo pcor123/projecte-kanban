@@ -82,21 +82,20 @@ function guardarTasques(tasquesArray) {
 /**
  * Afegeix dades de prova si no hi ha tasques guardades
  */
+// Modifica inicialitzarDadesDeProva() perquè retorni les tasques
 function inicialitzarDadesDeProva() {
-    if (tasques.length === 0) {
-        const dadesProva = [
-            crearTasca('Revisar documentació', 'Revisar la documentació del projecte', 'mitjana', '', 'todo'),
-            crearTasca('Crear estructura HTML', 'Implementar l\'estructura bàsica del HTML', 'alta', '2024-12-15', 'in-progress'),
-            crearTasca('Dissenyar CSS', 'Crear els estils bàsics de l\'aplicació', 'alta', '2024-12-10', 'done'),
-            crearTasca('Implementar funcionalitats JS', 'Afegir les funcions bàsiques de JavaScript', 'mitjana', '2024-12-20', 'todo'),
-            crearTasca('Provar l\'aplicació', 'Fer proves de totes les funcionalitats', 'baixa', '2024-12-25', 'todo'),
-            crearTasca('Documentar el codi', 'Afegir comentaris al codi font', 'mitjana', '2024-12-18', 'todo')
-        ];
-        
-        tasques = dadesProva;
-        guardarTasques(tasques);
-        console.log('Dades de prova inicialitzades');
-    }
+    const dadesProva = [
+        crearTasca('Revisar documentació', 'Revisar la documentació del projecte', 'mitjana', '', 'todo'),
+        crearTasca('Crear estructura HTML', 'Implementar l\'estructura bàsica del HTML', 'alta', '2024-12-15', 'in-progress'),
+        crearTasca('Dissenyar CSS', 'Crear els estils bàsics de l\'aplicació', 'alta', '2024-12-10', 'done'),
+        crearTasca('Implementar funcionalitats JS', 'Afegir les funcions bàsiques de JavaScript', 'mitjana', '2024-12-20', 'todo'),
+        crearTasca('Provar l\'aplicació', 'Fer proves de totes les funcionalitats', 'baixa', '2024-12-25', 'todo'),
+        crearTasca('Documentar el codi', 'Afegir comentaris al codi font', 'mitjana', '2024-12-18', 'todo')
+    ];
+
+    guardarTasques(dadesProva);
+    console.log('Dades de prova inicialitzades');
+    return dadesProva;
 }
 
 // FUNCIONS DE GESTIÓ DE TASQUES
@@ -172,16 +171,16 @@ function actualitzarEstadistiques() {
     const total = tasques.length;
     const fets = tasques.filter(t => t.estat === 'done').length;
     const percentatgeFets = total > 0 ? Math.round((fets / total) * 100) : 0;
-    
+
     // Actualitzem els comptadors
     document.getElementById('total-tasks').textContent = total;
     document.getElementById('completed-tasks').textContent = `${percentatgeFets}%`;
-    
+
     // Actualitzem els comptadors de cada columna
     document.getElementById('todo-count').textContent = tasques.filter(t => t.estat === 'todo').length;
     document.getElementById('in-progress-count').textContent = tasques.filter(t => t.estat === 'in-progress').length;
     document.getElementById('done-count').textContent = fets;
-    
+
     console.log(`Estadístiques actualitzades: ${total} tasques, ${percentatgeFets}% completades`);
 }
 
@@ -193,7 +192,7 @@ function resetFormulari() {
     estatTasca.value = 'todo'; // Valor per defecte
     cancelEditBtn.style.display = 'none';
     editantTascaId = null;
-    
+
     // Canviar el text del botó de guardar
     const botoGuardar = formulariTasca.querySelector('button[type="submit"]');
     botoGuardar.innerHTML = '<i class="fas fa-save"></i> Guardar Tasca';
@@ -208,14 +207,14 @@ function resetFormulari() {
  */
 function manejarEnviamentFormulari(event) {
     event.preventDefault();
-    
+
     // Validació bàsica: el títol és obligatori
     if (!titolTasca.value.trim()) {
         alert('El títol és obligatori');
         titolTasca.focus();
         return;
     }
-    
+
     // Crear objecte amb les dades de la tasca
     const dadesTasca = {
         titol: titolTasca.value.trim(),
@@ -224,7 +223,7 @@ function manejarEnviamentFormulari(event) {
         dataVenciment: dataVencimentTasca.value,
         estat: estatTasca.value
     };
-    
+
     if (editantTascaId) {
         // Mode edició - actualitzar tasca existent
         actualitzarTasca(editantTascaId, dadesTasca);
@@ -243,7 +242,7 @@ function manejarEnviamentFormulari(event) {
         renderTauler();              // ← Mostra la nova tasca al tauler
         alert('Tasca afegida correctament!');
     }
-    
+
     // Actualitzar estadístiques i resetar formulari
     actualitzarEstadistiques();
     resetFormulari();
@@ -255,22 +254,22 @@ function manejarEnviamentFormulari(event) {
 function prepararEdicioTasca(id) {
     const tasca = obtenirTascaPerId(id);
     if (!tasca) return;
-    
+
     // Omplir el formulari amb les dades de la tasca
     titolTasca.value = tasca.titol;
     descripcioTasca.value = tasca.descripcio;
     prioritatTasca.value = tasca.prioritat;
     dataVencimentTasca.value = tasca.dataVenciment;
     estatTasca.value = tasca.estat;
-    
+
     // Actualitzar mode edició
     editantTascaId = id;
     cancelEditBtn.style.display = 'inline-flex';
-    
+
     // Canviar el text del botó de guardar
     const botoGuardar = formulariTasca.querySelector('button[type="submit"]');
     botoGuardar.innerHTML = '<i class="fas fa-edit"></i> Actualitzar Tasca';
-    
+
     console.log('Preparat per editar tasca:', tasca);
 }
 
@@ -291,12 +290,12 @@ function netejarColumnes() {
 function renderTauler() {
     // Netejar totes les columnes
     netejarColumnes();
-    
+
     // Filtrar tasques per estat
     const tasquesTodo = tasques.filter(t => t.estat === 'todo');
     const tasquesInProgress = tasques.filter(t => t.estat === 'in-progress');
     const tasquesDone = tasques.filter(t => t.estat === 'done');
-    
+
     // Afegir tasques a les columnes corresponents
     if (tasquesTodo.length > 0) {
         tasquesTodo.forEach(tasca => {
@@ -305,7 +304,7 @@ function renderTauler() {
     } else {
         columnaPerFer.innerHTML = '<div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No hi ha tasques pendents</p></div>';
     }
-    
+
     if (tasquesInProgress.length > 0) {
         tasquesInProgress.forEach(tasca => {
             columnaEnCurs.appendChild(crearElementTasca(tasca));
@@ -313,7 +312,7 @@ function renderTauler() {
     } else {
         columnaEnCurs.innerHTML = '<div class="empty-state"><i class="fas fa-cogs"></i><p>Cap tasca en progrés</p></div>';
     }
-    
+
     if (tasquesDone.length > 0) {
         tasquesDone.forEach(tasca => {
             columnaFet.appendChild(crearElementTasca(tasca));
@@ -321,7 +320,7 @@ function renderTauler() {
     } else {
         columnaFet.innerHTML = '<div class="empty-state"><i class="fas fa-check"></i><p>Cap tasca completada</p></div>';
     }
-    
+
     // Actualitzar estadístiques
     actualitzarEstadistiques();
 }
@@ -329,7 +328,7 @@ function renderTauler() {
 function crearElementTasca(tasca) {
     const div = document.createElement('div');
     div.className = 'tasca-card';
-    
+
     // Afegim classe segons la prioritat
     div.classList.add(`priority-${tasca.prioritat}`);
 
@@ -368,13 +367,13 @@ function crearElementTasca(tasca) {
     // Botons d'acció
     const controlsDiv = document.createElement('div');
     controlsDiv.className = 'tasca-controls';
-    
+
     const editBtn = document.createElement('button');
     editBtn.textContent = 'Editar';
     editBtn.className = 'btn btn-secondary btn-sm';
     editBtn.addEventListener('click', () => prepararEdicioTasca(tasca.id));
     controlsDiv.appendChild(editBtn);
-    
+
     const delBtn = document.createElement('button');
     delBtn.textContent = 'Eliminar';
     delBtn.className = 'btn btn-danger btn-sm';
@@ -398,23 +397,25 @@ function crearElementTasca(tasca) {
  */
 function inicialitzarApp() {
     console.log('Inicialitzant aplicació Kanban...');
-    
+
     const avui = new Date().toISOString().split('T')[0];
     dataVencimentTasca.min = avui;
-    
+
     // Carregar tasques
     tasques = carregarTasques();
-    
-    // Inicialitzar dades de prova si cal
-    inicialitzarDadesDeProva();
-    
+
+    // Si no hi ha tasques carregades, assignar les de prova
+    if (!tasques || tasques.length === 0) {
+        tasques = inicialitzarDadesDeProva();
+    }
+
     // Renderitzar el tauler
     renderTauler();
-    
+
     // Configurar event listeners
     formulariTasca.addEventListener('submit', manejarEnviamentFormulari);
     cancelEditBtn.addEventListener('click', resetFormulari);
-    
+
     console.log('Aplicació inicialitzada correctament');
 }
 
