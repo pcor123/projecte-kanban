@@ -293,6 +293,7 @@ body {
     padding: 0.25rem;
 }
 
+/* Empty state */
 .empty-state {
     text-align: center;
     padding: 1rem 0.5rem;
@@ -303,6 +304,70 @@ body {
     font-size: 2rem;
     margin-bottom: 0.5rem;
     opacity: 0.5;
+}
+
+/* Tasques Kanban */
+.tasca-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+}
+
+.tasca-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.badge-prioritat {
+    padding: 0.1rem 0.3rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    text-transform: capitalize;
+    color: white;
+}
+
+.priority-baixa .badge-prioritat {
+    background: #48bb78; /* verd */
+}
+
+.priority-mitjana .badge-prioritat {
+    background: #ed8936; /* taronja */
+}
+
+.priority-alta .badge-prioritat {
+    background: #f56565; /* vermell */
+}
+
+.tasca-descripcio {
+    font-size: 0.8rem;
+    color: #4a5568;
+}
+
+.tasca-estat {
+    margin-top: 0.25rem;
+    padding: 0.25rem;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.8rem;
+}
+
+.tasca-controls {
+    display: flex;
+    gap: 0.3rem;
+    margin-top: 0.25rem;
+}
+
+.tasca-controls .btn-sm {
+    padding: 0.2rem 0.4rem;
+    font-size: 0.7rem;
 }
 
 /* Footer */

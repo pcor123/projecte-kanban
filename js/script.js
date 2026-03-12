@@ -278,9 +278,9 @@ function prepararEdicioTasca(id) {
 // =========================
 
 // Variables para las columnas
-const columnaPerFer = document.getElementById('todo-tasks');
-const columnaEnCurs = document.getElementById('in-progress-tasks');
-const columnaFet = document.getElementById('done-tasks');
+const columnaPerFer = document.getElementById('per-fer-tasks');
+const columnaEnCurs = document.getElementById('en-curs-tasks');
+const columnaFet = document.getElementById('fet-tasks');
 
 function netejarColumnes() {
     columnaPerFer.innerHTML = '';

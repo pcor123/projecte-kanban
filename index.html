@@ -28,9 +28,8 @@
         </header>
 
         <main class="main-content">
-            <!-- Sección de formulario y controles -->
+            <!-- Secció de formulari i filtres -->
             <aside class="sidebar">
-                <!-- Formulario para crear/editar tareas -->
                 <section class="form-section">
                     <h2><i class="fas fa-plus-circle"></i> Nova Tasca</h2>
                     <form id="task-form">
@@ -38,12 +37,10 @@
                             <label for="task-title">Títol *</label>
                             <input type="text" id="task-title" name="title" required placeholder="Introdueix el títol">
                         </div>
-                        
                         <div class="form-group">
                             <label for="task-description">Descripció</label>
                             <textarea id="task-description" name="description" rows="3" placeholder="Descripció de la tasca"></textarea>
                         </div>
-                        
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="task-priority">Prioritat</label>
@@ -53,13 +50,11 @@
                                     <option value="alta">Alta</option>
                                 </select>
                             </div>
-                            
                             <div class="form-group">
                                 <label for="task-due-date">Data límit</label>
                                 <input type="date" id="task-due-date" name="dueDate">
                             </div>
                         </div>
-                        
                         <div class="form-group">
                             <label for="task-status">Estat</label>
                             <select id="task-status" name="status">
@@ -68,7 +63,6 @@
                                 <option value="done">Fet</option>
                             </select>
                         </div>
-                        
                         <div class="form-buttons">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-save"></i> Guardar Tasca
@@ -79,11 +73,9 @@
                         </div>
                     </form>
                 </section>
-                
-                <!-- Filtros y búsqueda -->
+
                 <section class="filters-section">
                     <h2><i class="fas fa-filter"></i> Filtres i Cerca</h2>
-                    
                     <div class="form-group">
                         <label for="search-task">Cercar tasques</label>
                         <div class="search-box">
@@ -91,7 +83,6 @@
                             <i class="fas fa-search"></i>
                         </div>
                     </div>
-                    
                     <div class="form-group">
                         <label>Filtrar per estat</label>
                         <div class="filter-options">
@@ -101,7 +92,6 @@
                             <button class="filter-btn" data-filter="done">Fet</button>
                         </div>
                     </div>
-                    
                     <div class="form-group">
                         <label>Filtrar per prioritat</label>
                         <div class="filter-options">
@@ -114,49 +104,42 @@
                 </section>
             </aside>
 
-            <!-- Sección principal: Tablero Kanban -->
+            <!-- Tauler Kanban -->
             <section class="kanban-board">
                 <h2 class="board-title">Tauler Kanban</h2>
-                
                 <div class="columns-container">
-                    <!-- Columna: Per fer -->
-                    <div class="column" id="todo-column">
+                    <div class="column" id="per-fer-column">
                         <div class="column-header">
                             <h3><i class="fas fa-circle"></i> Per fer</h3>
                             <span class="task-count" id="todo-count">0</span>
                         </div>
-                        <div class="tasks-list" id="todo-tasks">
-                            <!-- Las tareas se añadirán aquí dinámicamente -->
+                        <div class="tasks-list" id="per-fer-tasks">
                             <div class="empty-state">
                                 <i class="fas fa-clipboard-list"></i>
                                 <p>No hi ha tasques pendents</p>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Columna: En curs -->
-                    <div class="column" id="in-progress-column">
+
+                    <div class="column" id="en-curs-column">
                         <div class="column-header">
                             <h3><i class="fas fa-spinner"></i> En curs</h3>
                             <span class="task-count" id="in-progress-count">0</span>
                         </div>
-                        <div class="tasks-list" id="in-progress-tasks">
-                            <!-- Las tareas se añadirán aquí dinámicamente -->
+                        <div class="tasks-list" id="en-curs-tasks">
                             <div class="empty-state">
                                 <i class="fas fa-cogs"></i>
                                 <p>Cap tasca en progrés</p>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Columna: Fet -->
-                    <div class="column" id="done-column">
+
+                    <div class="column" id="fet-column">
                         <div class="column-header">
                             <h3><i class="fas fa-check-circle"></i> Fet</h3>
                             <span class="task-count" id="done-count">0</span>
                         </div>
-                        <div class="tasks-list" id="done-tasks">
-                            <!-- Las tareas se añadirán aquí dinámicamente -->
+                        <div class="tasks-list" id="fet-tasks">
                             <div class="empty-state">
                                 <i class="fas fa-check"></i>
                                 <p>Cap tasca completada</p>
