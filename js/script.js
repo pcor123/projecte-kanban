@@ -109,7 +109,7 @@ function inicialitzarDadesDeProva() {
 function afegirTasca(tasca) {
     tasques.push(tasca);
     guardarTasques(tasques);
-    console.log('Tasca afegida:', tasca);
+    renderTauler(); // <-- afegim aquí
 }
 
 /**
@@ -120,15 +120,12 @@ function afegirTasca(tasca) {
 function actualitzarTasca(id, dadesActualitzades) {
     const index = tasques.findIndex(t => t.id === id);
     if (index !== -1) {
-        // Mantenim l'ID i la data de creació originals
-        tasques[index] = {
-            ...tasques[index],
-            ...dadesActualitzades
-        };
+        tasques[index] = { ...tasques[index], ...dadesActualitzades };
         guardarTasques(tasques);
-        console.log('Tasca actualitzada:', tasques[index]);
+        renderTauler(); // <-- afegim aquí
     }
 }
+
 
 /**
  * Elimina una tasca
@@ -137,7 +134,7 @@ function actualitzarTasca(id, dadesActualitzades) {
 function eliminarTasca(id) {
     tasques = tasques.filter(t => t.id !== id);
     guardarTasques(tasques);
-    console.log('Tasca eliminada, ID:', id);
+    renderTauler(); // <-- afegim aquí
 }
 
 /**
