@@ -418,12 +418,21 @@ function inicialitzarApp() {
         tasques = inicialitzarDadesDeProva();
     }
 
-    // Renderitzar el tauler
+    // Renderitzar el tauler inicial
     renderTauler();
 
     // Configurar event listeners
     formulariTasca.addEventListener('submit', manejarEnviamentFormulari);
     cancelEditBtn.addEventListener('click', resetFormulari);
+
+    // Cerca
+    searchInput.addEventListener('input', () => {
+        filtres.text = searchInput.value;
+        renderTauler();
+    });
+
+    // Botons filtre
+    configurarFiltres();
 
     console.log('Aplicació inicialitzada correctament');
 }
@@ -465,6 +474,34 @@ searchInput.addEventListener('input', () => {
     filtres.text = searchInput.value;
     renderTauler();
 });
+
+function configurarFiltres() {
+    // Botons estat
+    document.querySelectorAll('.filter-options [data-filter]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            filtres.estat = btn.dataset.filter === 'all' ? 'totes' : btn.dataset.filter;
+            
+            // Actualitzar classe 'active'
+            btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            renderTauler();
+        });
+    });
+
+    // Botons prioritat
+    document.querySelectorAll('.filter-options [data-priority]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            filtres.prioritat = btn.dataset.priority === 'all' ? 'totes' : btn.dataset.priority;
+            
+            // Actualitzar classe 'active'
+            btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            renderTauler();
+        });
+    });
+}
 
 // Iniciar l'aplicació quan el DOM estigui carregat
 document.addEventListener('DOMContentLoaded', inicialitzarApp);
