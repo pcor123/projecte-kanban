@@ -3,6 +3,11 @@
 // Variables globals
 let tasques = [];
 let editantTascaId = null;
+let filtres = {
+    estat: 'totes',      // 'todo' | 'in-progress' | 'done' | 'totes'
+    prioritat: 'totes',  // 'baixa' | 'mitjana' | 'alta' | 'totes'
+    text: ''             // text de cerca
+};
 
 // Elements del DOM
 const formulariTasca = document.getElementById('task-form');
@@ -12,6 +17,7 @@ const prioritatTasca = document.getElementById('task-priority');
 const dataVencimentTasca = document.getElementById('task-due-date');
 const estatTasca = document.getElementById('task-status');
 const cancelEditBtn = document.getElementById('cancel-edit');
+const searchInput = document.getElementById('search-tasks');
 
 // Clau per al localStorage
 const CLAU_TASQUES = 'tasquesKanban';
@@ -291,10 +297,13 @@ function renderTauler() {
     // Netejar totes les columnes
     netejarColumnes();
 
+    // tasques filtrades
+    const tasquesFiltrades = getTasquesFiltrades(tasques, filtres);
+
     // Filtrar tasques per estat
-    const tasquesTodo = tasques.filter(t => t.estat === 'todo');
-    const tasquesInProgress = tasques.filter(t => t.estat === 'in-progress');
-    const tasquesDone = tasques.filter(t => t.estat === 'done');
+    const tasquesTodo = tasquesFiltrades.filter(t => t.estat === 'todo');
+    const tasquesInProgress = tasquesFiltrades.filter(t => t.estat === 'in-progress');
+    const tasquesDone = tasquesFiltrades.filter(t => t.estat === 'done');
 
     // Afegir tasques a les columnes corresponents
     if (tasquesTodo.length > 0) {
@@ -418,6 +427,44 @@ function inicialitzarApp() {
 
     console.log('Aplicació inicialitzada correctament');
 }
+
+
+// Filtres issue: Filtres, cerca i estadístiques
+// ==============================
+function getTasquesFiltrades(tasquesArray, filtres) {
+    return tasquesArray.filter(tasca => {
+
+        // FILTRE PER ESTAT
+        if (filtres.estat !== 'totes' && tasca.estat !== filtres.estat) {
+            return false;
+        }
+
+        // FILTRE PER PRIORITAT
+        if (filtres.prioritat !== 'totes' && tasca.prioritat !== filtres.prioritat) {
+            return false;
+        }
+
+        // CERCA DE TEXT
+        if (filtres.text) {
+            const text = filtres.text.toLowerCase();
+
+            const titol = tasca.titol.toLowerCase();
+            const desc = tasca.descripcio.toLowerCase();
+
+            if (!titol.includes(text) && !desc.includes(text)) {
+                return false;
+            }
+        }
+
+        return true;
+    });
+}
+
+
+searchInput.addEventListener('input', () => {
+    filtres.text = searchInput.value;
+    renderTauler();
+});
 
 // Iniciar l'aplicació quan el DOM estigui carregat
 document.addEventListener('DOMContentLoaded', inicialitzarApp);
